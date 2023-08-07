@@ -1,8 +1,7 @@
 import express from 'express';
 import __dirname from './utils.js';
 import handlebars from 'express-handlebars';
-//import productsRouter from './routes/products.router.js';
-//import cartsRouter from './routes/carts.router.js';
+import productsManager from './ProductsManager.js'
 import viewsRouter from './routes/views.router.js';
 import { Server } from 'socket.io'; 
 
@@ -25,9 +24,17 @@ const httpServer = app.listen(PORT,()=>{
 
 const socketServer = new Server (httpServer);
 
+const chatBox = [];
+
 socketServer.on ('connection', socket =>{
-    console.log("Nuevo cliente conectado");
-    socket.on('message', data => {
-        console.log(data);
-    })
+    console.log("Nuevo cliente conectado:", socket.id);
+    socket.on('message', (data) => {
+        chatBox.push ({id:socket.id, data});
+        //console.log(chatBox);
+        socketServer.emit('chatBox', chatBox);
+    });
+    socket.on('disconnect', () => {
+        console.log('Cliente', socket.id, 'desconectado');
+    });
+    socketServer.emit('bienvenida',`Bienvenido a My E-book Store usuario ${socket.id}`);
 });
