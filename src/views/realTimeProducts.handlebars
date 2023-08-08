@@ -1,7 +1,49 @@
+<div class="forms">
+    <div>
+        <h2>Add Product</h2>
+        <form id="prodsForm">
+            Title: <input type="text" name="title" id="title" required>
+            Description: <input type="text" name="description" id="description" required>
+            Price: <input type="number" name="price" id="price" required>
+            Stock: <input type="number" name="stock" id="stock" required>
+            Code: <input type="text" name="code" id="code" required>
+            Category: <input type="text" name="category" id="category" required>
+            <input type="submit" value="Send">
+        </form>
+    </div>
+    <div>
+        <h2>Delete Product</h2>
+        <form id="deleteProduct">
+            ID: <input type="number" name="id" id="id">
+            <input type="submit" value="Delete">
+        </form>
+    </div>
+</div>
 
-
-
-
+<table id="headProducts">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>code</th>
+        </tr>
+    </thead>
+    <tbody id="prodsTable">
+        {{#each products}}
+        <tr>
+            <td>{{id}}</td>
+            <td>{{title}}</td>
+            <td>{{description}}</td>
+            <td>{{price}}</td>
+            <td>{{stock}}</td>
+            <td>{{code}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
 
 
 

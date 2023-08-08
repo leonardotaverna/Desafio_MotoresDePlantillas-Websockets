@@ -1,12 +1,27 @@
-<h2>
-    SOCKET CLIENT
-</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>code</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each products}}
+        <tr>
+            <td>{{id}}</td>
+            <td>{{title}}</td>
+            <td>{{description}}</td>
+            <td>{{price}}</td>
+            <td>{{stock}}</td>
+            <td>{{code}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
 
-<form id="form">
-    Message: <input type="text" name="message" id="message">
-    <input type="submit" value="SEND">
-</form>
 
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>

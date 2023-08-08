@@ -7,14 +7,17 @@ import { Server } from 'socket.io';
 
 const app = express();
 
+//Express
 app.use (express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
 
+//Handlebars
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
+//Hooks
 app.use('/api/views',viewsRouter);
 
 const PORT = 8080
@@ -23,8 +26,6 @@ const httpServer = app.listen(PORT,()=>{
 });
 
 const socketServer = new Server (httpServer);
-
-const chatBox = [];
 
 socketServer.on ('connection', socket =>{
     console.log("Nuevo cliente conectado:", socket.id);
