@@ -50,7 +50,7 @@ socketClient.on("addedProd", (newProduct) => {
 
 });
 
-socketClient.on('deleted', (arrProducts) => {
+socketClient.on('deletedProd', (arrProducts) => {
     const addRow = arrProducts.map((objProd) => {
         return `
             <tr>

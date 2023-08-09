@@ -104,7 +104,6 @@ class ProductsManager {
     }
 };
 
-
 const productsManager = new ProductsManager ('Products.json')
 
 export default productsManager

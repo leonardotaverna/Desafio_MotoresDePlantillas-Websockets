@@ -29,13 +29,29 @@ const socketServer = new Server (httpServer);
 
 socketServer.on ('connection', socket =>{
     console.log("Nuevo cliente conectado:", socket.id);
-    socket.on('message', (data) => {
-        chatBox.push ({id:socket.id, data});
-        //console.log(chatBox);
-        socketServer.emit('chatBox', chatBox);
-    });
+
     socket.on('disconnect', () => {
         console.log('Cliente', socket.id, 'desconectado');
     });
+
     socketServer.emit('bienvenida',`Bienvenido a My E-book Store usuario ${socket.id}`);
+
+    socket.on('addProd', async (objProd) => {
+        const opAdd = await productsManager.addProduct(objProd);
+        if(opAdd.operation){
+            socketServer.emit('addedProd', opAdd.newProduct);
+        } else{
+            socket.emit('addedProd', opAdd.message);
+        }
+    });
+
+    socket.on('deleteProd', async (id) => {
+        const opDel = await productsManager.deleteProduct(id);
+        if(opDel.operation){
+            socketServer.emit("deletedProd", opDel.modData);
+        } else{
+            socket.emit("deletedProd", opDel.message);
+        }
+    });
+    
 });
