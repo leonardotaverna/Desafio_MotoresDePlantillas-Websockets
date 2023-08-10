@@ -3,6 +3,7 @@ import __dirname from './utils.js';
 import handlebars from 'express-handlebars';
 import productsManager from './ProductsManager.js'
 import viewsRouter from './routes/views.router.js';
+import productsRouter from './routes/products.router.js'
 import { Server } from 'socket.io'; 
 
 const app = express();
@@ -46,12 +47,21 @@ socketServer.on ('connection', socket =>{
     });
 
     socket.on('deleteProd', async (id) => {
-        const opDel = await productsManager.deleteProduct(id);
+        await productsManager.deleteProduct(Number (id));
+
+        const newProductsArray = await productsManager.getProducts();
+
+        socketServer.emit("deletedProd",newProductsArray);
+        
+        
+        
+        
+        /*const opDel = await productsManager.deleteProduct(id);
         if(opDel.operation){
             socketServer.emit("deletedProd", opDel.modData);
         } else{
             socket.emit("deletedProd", opDel.message);
-        }
+        }*/
     });
     
 });

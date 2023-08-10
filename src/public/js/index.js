@@ -4,9 +4,8 @@ const prodsForm = document.getElementById('prodsForm');
 const title = document.getElementById("title");
 const description = document.getElementById("description");
 const price = document.getElementById("price");
-const stock = document.getElementById("stock");
 const code = document.getElementById("code");
-const category = document.getElementById("category");
+const stock = document.getElementById("stock");
 const prodsTable = document.getElementById("prodsTable");
 const deleteForm = document.getElementById("deleteProduct");
 const id = document.getElementById("id");
@@ -17,17 +16,15 @@ prodsForm.onsubmit = (e) => {
         title: title.value,
         description: description.value,
         price: Number(price.value),
-        stock: Number(stock.value),
         code: code.value,
-        category: category.value,
+        stock: Number(stock.value),
     };
     socketClient.emit("addProd", obj);
     title.value = '';
     description.value = '';
     price.value = '';
-    stock.value = '';
     code.value = '';
-    category.value = '';
+    stock.value = '';
 };
 
 deleteForm.onsubmit = (e) => {
@@ -50,19 +47,19 @@ socketClient.on("addedProd", (newProduct) => {
 
 });
 
-socketClient.on('deletedProd', (arrProducts) => {
-    const addRow = arrProducts.map((objProd) => {
+socketClient.on('deletedProd', (prodsArray) => {
+    const addRow = prodsArray.map((objProd) => {
         return `
             <tr>
             <td>${objProd.id}</td>
             <td>${objProd.title}</td>
             <td>${objProd.description}</td>
             <td>${objProd.price}</td>
-            <td>${objProd.stock}</td>
             <td>${objProd.code}</td>
+            <td>${objProd.stock}</td>
             </tr>
         `;
     }).join(' ');
-    tableProds.innerHTML = addRow;
+    prodsTable.innerHTML = addRow;
 });
 
