@@ -21,7 +21,8 @@ app.set('view engine', 'handlebars');
 //Hooks
 app.use('/api/views',viewsRouter);
 
-const PORT = 8080
+const PORT = 8010
+
 const httpServer = app.listen(PORT,()=>{
     console.log(`Escuchando al puerto ${PORT}`);
 });
@@ -37,13 +38,19 @@ socketServer.on ('connection', socket =>{
 
     socketServer.emit('bienvenida',`Bienvenido a My E-book Store usuario ${socket.id}`);
 
-    socket.on('addProd', async (objProd) => {
-        const opAdd = await productsManager.addProduct(objProd);
+    socket.on('addProd', async () => {
+        await productsManager.addProduct();
+        const newProductsArray = await productsManager.getProducts();
+        socket.emit ("addedProd", newProductsArray);
+        
+        
+        
+        /*const opAdd = await productsManager.addProduct(objProd);
         if(opAdd.operation){
             socketServer.emit('addedProd', opAdd.newProduct);
         } else{
             socket.emit('addedProd', opAdd.message);
-        }
+        }*/
     });
 
     socket.on('deleteProd', async (id) => {
@@ -51,17 +58,7 @@ socketServer.on ('connection', socket =>{
 
         const newProductsArray = await productsManager.getProducts();
 
-        socketServer.emit("deletedProd",newProductsArray);
-        
-        
-        
-        
-        /*const opDel = await productsManager.deleteProduct(id);
-        if(opDel.operation){
-            socketServer.emit("deletedProd", opDel.modData);
-        } else{
-            socket.emit("deletedProd", opDel.message);
-        }*/
+        socketServer.emit("deletedProd",await newProductsArray);
     });
     
 });

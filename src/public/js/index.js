@@ -15,22 +15,16 @@ prodsForm.onsubmit = (e) => {
     const obj = {
         title: title.value,
         description: description.value,
-        price: Number(price.value),
         code: code.value,
+        price: Number(price.value),
         stock: Number(stock.value),
     };
     socketClient.emit("addProd", obj);
     title.value = '';
     description.value = '';
-    price.value = '';
     code.value = '';
+    price.value = '';
     stock.value = '';
-};
-
-deleteForm.onsubmit = (e) => {
-    e.preventDefault();
-    socketClient.emit('deleteProd', Number(id.value));
-    id.value = '';
 };
 
 socketClient.on("addedProd", (newProduct) => {
@@ -39,13 +33,19 @@ socketClient.on("addedProd", (newProduct) => {
             <td>${newProduct.id}</td>
             <td>${newProduct.title}</td>
             <td>${newProduct.description}</td>
+            <td>${newProduct.code}</td>
             <td>${newProduct.price}</td>
             <td>${newProduct.stock}</td>
-            <td>${newProduct.code}</td>
         </tr>`;
     prodsTable.innerHTML += addRow;
 
 });
+
+deleteForm.onsubmit = (e) => {
+    e.preventDefault();
+    socketClient.emit('deleteProd', Number(id.value));
+    id.value = '';
+};
 
 socketClient.on('deletedProd', (prodsArray) => {
     const addRow = prodsArray.map((objProd) => {
@@ -54,8 +54,8 @@ socketClient.on('deletedProd', (prodsArray) => {
             <td>${objProd.id}</td>
             <td>${objProd.title}</td>
             <td>${objProd.description}</td>
-            <td>${objProd.price}</td>
             <td>${objProd.code}</td>
+            <td>${objProd.price}</td>
             <td>${objProd.stock}</td>
             </tr>
         `;
