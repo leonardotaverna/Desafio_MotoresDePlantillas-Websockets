@@ -5,6 +5,7 @@
             Title: <input type="text" name="title" id="title" required>
             Description: <input type="text" name="description" id="description" required>
             Code: <input type="text" name="code" id="code" required>
+            Thumbnail: <input type="text" name="thumbnail" id="thumbnail">
             Price: <input type="number" name="price" id="price" required>
             Stock: <input type="number" name="stock" id="stock" required>
             <input type="submit" value="Send">
@@ -25,7 +26,8 @@
             <th>ID</th>
             <th>Title</th>
             <th>Description</th>
-            <th>code</th>
+            <th>Code</th>
+            <th>Thumbnail</th>
             <th>Price</th>
             <th>Stock</th>
         </tr>
@@ -37,6 +39,7 @@
             <td>{{title}}</td>
             <td>{{description}}</td>
             <td>{{code}}</td>
+            <td>{{thumbnail}}</td>
             <td>{{price}}</td>
             <td>{{stock}}</td>
         </tr>

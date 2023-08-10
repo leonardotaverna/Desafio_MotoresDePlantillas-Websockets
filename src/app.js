@@ -21,7 +21,7 @@ app.set('view engine', 'handlebars');
 //Hooks
 app.use('/api/views',viewsRouter);
 
-const PORT = 8010
+const PORT = 8080
 
 const httpServer = app.listen(PORT,()=>{
     console.log(`Escuchando al puerto ${PORT}`);
@@ -38,19 +38,15 @@ socketServer.on ('connection', socket =>{
 
     socketServer.emit('bienvenida',`Bienvenido a My E-book Store usuario ${socket.id}`);
 
-    socket.on('addProd', async () => {
-        await productsManager.addProduct();
-        const newProductsArray = await productsManager.getProducts();
-        socket.emit ("addedProd", newProductsArray);
-        
-        
-        
-        /*const opAdd = await productsManager.addProduct(objProd);
-        if(opAdd.operation){
-            socketServer.emit('addedProd', opAdd.newProduct);
+    socket.on('addProd', async (obj) => {
+        console.log('Received data from client:', obj);
+        const newProduct = await productsManager.addProduct(obj);
+        if (!(newProduct instanceof Error)){
+            const newProductsArray = await productsManager.getProducts();
+            socket.emit ("addedProd", newProductsArray);
         } else{
-            socket.emit('addedProd', opAdd.message);
-        }*/
+            console.error(newProduct);
+        }
     });
 
     socket.on('deleteProd', async (id) => {
