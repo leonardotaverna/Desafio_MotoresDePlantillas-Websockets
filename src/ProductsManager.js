@@ -42,7 +42,7 @@ class ProductsManager {
                 title,
                 description,
                 price,
-                //thumbnail,
+                thumbnail,
                 code,
                 stock,
             };
