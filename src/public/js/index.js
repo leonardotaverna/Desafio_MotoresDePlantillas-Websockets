@@ -21,31 +21,42 @@ prodsForm.onsubmit = (e) => {
         price: Number(price.value),
         stock: Number(stock.value),
     };
-    
+
     socketClient.emit("addProd", obj);
-    title.value = '';
-    description.value = '';
-    code.value = '';
-    thumbnail.value = '';
-    price.value = '';
-    stock.value = '';
+    // title.value = '';
+    // description.value = '';
+    // code.value = '';
+    // thumbnail.value = '';
+    // price.value = '';
+    // stock.value = '';
     console.log('Form data to be emitted:', obj);
 };
 
-socketClient.on("addedProd", (newProduct) => {
-    console.log('Received new product data from server:', newProduct);
-    const addRow = `
+socketClient.on("addedProd", async (newProductsArray) => {
+    //await productsManager.getProducts();
+    const addRow = await newProductsArray.map((objProd) => {
+    return `
         <tr>
-            <td>${newProduct.id}</td>
-            <td>${newProduct.title}</td>
-            <td>${newProduct.description}</td>
-            <td>${newProduct.code}</td>
-            <td>${newProduct.thumbnail || 'No Thumbnail'}</td>
-            <td>${newProduct.price}</td>
-            <td>${newProduct.stock}</td>
-        </tr>`;
+        <td>${objProd.id}</td>
+        <td>${objProd.title}</td>
+        <td>${objProd.description}</td>
+        <td>${objProd.code}</td>
+        <td>${objProd.thumbnail || 'No Thumbnail'}</td>
+        <td>${objProd.price}</td>
+        <td>${objProd.stock}</td>
+        </tr>
+     `
+}).join(' ');
+        // < tr >
+        //     <td>${newProductAdded.id}</td>
+        //     <td>${newProductAdded.title}</td>
+        //     <td>${newProductAdded.description}</td>
+        //     <td>${newProductAdded.code}</td>
+        //     <td>${newProductAdded.thumbnail || 'No Thumbnail'}</td>
+        //     <td>${newProductAdded.price}</td>
+        //     <td>${newProductAdded.stock}</td>
+        // </tr > `;
     prodsTable.innerHTML += addRow;
-
 });
 
 deleteForm.onsubmit = (e) => {
@@ -55,16 +66,17 @@ deleteForm.onsubmit = (e) => {
 };
 
 socketClient.on('deletedProd', (prodsArray) => {
+    console.log('deleted:', prodsArray);
     const addRow = prodsArray.map((objProd) => {
         return `
-            <tr>
+        < tr >
             <td>${objProd.id}</td>
             <td>${objProd.title}</td>
             <td>${objProd.description}</td>
             <td>${objProd.code}</td>
             <td>${objProd.price}</td>
             <td>${objProd.stock}</td>
-            </tr>
+            </tr >
         `;
     }).join(' ');
     prodsTable.innerHTML = addRow;

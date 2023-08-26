@@ -3,7 +3,7 @@ import __dirname from './utils.js';
 import handlebars from 'express-handlebars';
 import productsManager from './ProductsManager.js'
 import viewsRouter from './routes/views.router.js';
-import productsRouter from './routes/products.router.js'
+//import productsRouter from './routes/products.router.js'
 import { Server } from 'socket.io'; 
 
 const app = express();
@@ -40,13 +40,21 @@ socketServer.on ('connection', socket =>{
 
     socket.on('addProd', async (obj) => {
         console.log('Received data from client:', obj);
-        const newProduct = await productsManager.addProduct(obj);
-        if (!(newProduct instanceof Error)){
-            const newProductsArray = await productsManager.getProducts();
-            socket.emit ("addedProd", newProductsArray);
-        } else{
-            console.error(newProduct);
-        }
+
+        await productsManager.addProduct(obj);
+
+        const newProductsArray = await productsManager.getProducts();
+
+        socket.emit ("addedProd", newProductsArray);
+
+        console.log('New array emitted:', newProductsArray);
+
+        // if (!(newProduct instanceof Error)){
+        //     const newProductsArray = await productsManager.getProducts(newProduct);
+        //     socket.emit ("addedProd", newProductsArray);
+        // } else{
+        //     console.error(newProduct);
+        // }
     });
 
     socket.on('deleteProd', async (id) => {
@@ -54,7 +62,7 @@ socketServer.on ('connection', socket =>{
 
         const newProductsArray = await productsManager.getProducts();
 
-        socketServer.emit("deletedProd",await newProductsArray);
+        socketServer.emit("deletedProd", newProductsArray);
     });
     
 });
